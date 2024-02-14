@@ -3,9 +3,14 @@ import React, { useState, useCallback } from 'react';
 
 import * as Animatable from 'react-native-animatable'
 
-
+import {useNavigation} from '@react-navigation/native'
 
 const Welcome = () => {
+
+  // para acessar a pagina navigation
+  const navigation = useNavigation();
+
+
 //--------------------------------------------------------------------------------
   //funcão para criar o reload page
   const [refreshing, setRefreshing] = React.useState(false);
@@ -23,7 +28,7 @@ return (
   refreshControl={
     <RefreshControl
       refreshing={refreshing}
-      onRefresh={onRefresh}
+      onRefresh={()=> navigation.navigate('Welcome')}
     />
   }
 >
@@ -41,7 +46,8 @@ return (
       <Text style={styles.title}>Welcome to the Uchiha World App.</Text>
       <Text style={styles.text}>Login to get started</Text>
 
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity style={styles.loginBtn}
+      onPress={() => navigation.navigate('SignUp')}>
         <Text style={styles.textBtn}>Log In</Text>
       </TouchableOpacity>
       </Animatable.View>
