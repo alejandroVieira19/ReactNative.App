@@ -1,10 +1,11 @@
-// app.js
+// database.js
 
 const express = require('express');
 const oracledb = require('oracledb');
 
 const app = express();
 const port = 3000;
+const nameVer = 'apple';
 
 // Configuração da conexão com o banco de dados Oracle
 const dbConfig = {
@@ -23,7 +24,7 @@ app.get('/dados-oracle', async (req, res) => {
 
     // Executa uma consulta SQL para recuperar dados
     const result = await connection.execute(
-      `SELECT * FROM item`
+      `SELECT * FROM item where lower(item_name) like lower('orange')`
     );
 
     // Retorna os dados recuperados como resposta da API
