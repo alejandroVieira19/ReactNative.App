@@ -1,27 +1,68 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'
+import {React,useState} from 'react'
 import * as Animatable from 'react-native-animatable'
 
+import { fireBase_AUTH } from '../../../BackEnd/Database/FireBase/firebase'
+import { signInWithEmailAndPassword } from '@firebase/auth';
+
+import { useNavigation } from '@react-navigation/native';
+
+
+
+
+
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const auth = fireBase_AUTH;
+  const navigation = useNavigation();
+  
+
+  
+
+  const handleLogin = async () => {
+
+    if(email && password) {
+      try {
+        const response = await signInWithEmailAndPassword(auth, email,password);
+
+        if(response.user) {
+          navigation.navigate('Main'); // Navegue para a outra tela após o login bem-sucedido
+         setEmail('')
+          setPassword('')
+        }
+      } catch (e) {
+        console.log(e.message)
+      }
+      setEmail('')
+      setPassword('')
+    }
+    }
+  
+
+  
   return (
     <View style={styles.container}>
 
       <Animatable.View style={styles.animatableView} animation={"fadeInLeft"} delay={500}>
-        <Text style={styles.message}>welcome to Log-In</Text>
+        <Text style={styles.message}>Log-In</Text>
        </Animatable.View>
 
        <Animatable.View style={styles.animatableTitle} animation={"fadeInUp"}>
         <Text style={styles.title}>Email</Text>
-        <TextInput placeholder='Type your email...' style={styles.input} placeholderTextColor={'#a7a3b4'}/>
+        <TextInput placeholder='Type your email...' style={styles.input} placeholderTextColor={'#a7a3b4'}  onChangeText={text => setEmail(text)} // Atualiza o estado do email
+        value={email}/>
 
         <Text style={styles.title}>Password</Text>
-        <TextInput placeholder='Type your password...' style={styles.input} placeholderTextColor={'#a7a3b4'}/>
+        <TextInput placeholder='Type your password...' style={styles.input} placeholderTextColor={'#a7a3b4'} onChangeText={text => setPassword(text)} value={password}
+        secureTextEntry={true}/>
 
         <TouchableOpacity style={styles.forgot}>
           <Text style={styles.registerBtn}>Forgot your password?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.login} >
+        <TouchableOpacity style={styles.login} onPress={handleLogin}  >
           <Text style={styles.lgnBtn}>Login</Text>
         </TouchableOpacity>
 
@@ -36,16 +77,7 @@ const Login = () => {
         style={styles.imageStyle}
         resizeMode='contain'
       />
-
-
-       </Animatable.View>
-
-       
-      
-    
-
-        
-
+      </Animatable.View>
       </View>
     
   )

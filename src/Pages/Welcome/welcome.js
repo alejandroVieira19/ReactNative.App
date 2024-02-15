@@ -44,12 +44,18 @@ return (
 
     <Animatable.View delay={600} animation={"fadeInUp"} style={styles.containerText}>
       <Text style={styles.title}>Welcome to the Uchiha World App.</Text>
-      <Text style={styles.text}>Login to get started</Text>
+      <Text style={styles.text}>Login to get started or sign up to start your adventure</Text>
 
       <TouchableOpacity style={styles.loginBtn}
       onPress={() => navigation.navigate('SignUp')}>
         <Text style={styles.textBtn}>Log In</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.SignUpBtn}
+      onPress={() => navigation.navigate('SignUp')}>
+        <Text style={styles.textBtn}>SignUp</Text>
+      </TouchableOpacity>
+
       </Animatable.View>
     </View>
 </ScrollView>
@@ -96,10 +102,22 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     width: '60%',
     alignSelf: 'center',
-    bottom: '15%',
+    bottom: '35%',
     backgroundColor: '#090909',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  SignUpBtn: {
+    position: 'absolute',
+    borderRadius: 50,
+    paddingVertical: 8,
+    width: '60%',
+    alignSelf: 'center',
+    bottom: '10%',
+    backgroundColor: '#090909',
+    justifyContent: 'center',
+    alignItems: 'center',
+
   },
   textBtn: {
     fontSize: 20,
