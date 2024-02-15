@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, RefreshControl, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, RefreshControl, ScrollView, TouchableHighlight, Switch } from 'react-native'
 import React, { useState, useCallback } from 'react';
 
 import * as Animatable from 'react-native-animatable'
@@ -9,6 +9,12 @@ const Welcome = () => {
 
   // para acessar a pagina navigation
   const navigation = useNavigation();
+
+  const [darkMode, setDarkMode] = useState(true);
+
+  const handleDarkModeToggle = () => {
+    setDarkMode(!darkMode);
+  };
 
 
 //--------------------------------------------------------------------------------
@@ -32,28 +38,36 @@ return (
     />
   }
 >
-  <View style={styles.container}>
-    <View style={styles.containerLogo}>
-      <Animatable.Image 
-        animation="flipInY"
-        source={require('../../assets/itachi.jpg')}
-        style={styles.imageStyle}
-        resizeMode='contain'
-      />
+  <View style={[styles.container, !darkMode && styles.lightView]}>
+    
+   
+    
+  
+     <View style={ [styles.containerLogo, !darkMode && styles.lightView ]}>
+      
+      <Animatable.Image animation={darkMode ? "flipInY" : "flipInX"}
+        delay={500}
+        source={!darkMode ? require('../../assets/light.png') : require('../../assets/rk.png')}
+       style={styles.imageStyle} resizeMode='contain'/>
+
+      <TouchableOpacity onPress={handleDarkModeToggle}>
+      <Text style={[styles.modeText, darkMode && styles.darkModeText]}>{!darkMode ? 'Light Mode' : 'Dark Mode'} </Text>
+      </TouchableOpacity>
+      
     </View>
 
-    <Animatable.View delay={600} animation={"fadeInUp"} style={styles.containerText}>
-      <Text style={styles.title}>Welcome to the Uchiha World App.</Text>
-      <Text style={styles.text}>Login to get started or sign up to start your adventure</Text>
+    <Animatable.View delay={750} animation={!darkMode ? "fadeInDown" : "fadeInUp"} style={[styles.containerText, !darkMode && styles.containerTextLight]}>
+      <Text style={[styles.title, !darkMode && styles.lightText]}>Welcome to the Uchiha World App.</Text>
+      <Text style={[styles.text, !darkMode && styles.lightText]}>Login to get started or sign up to start your adventure</Text>
 
-      <TouchableOpacity style={styles.loginBtn}
+      <TouchableOpacity style={[styles.loginBtn,!darkMode && styles.lightBorder]}
       onPress={() => navigation.navigate('SignUp')}>
-        <Text style={styles.textBtn}>Log In</Text>
+        <Text style={[styles.textBtn, !darkMode && styles.borderLightText]}>Log In</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.SignUpBtn}
+      <TouchableOpacity style={[styles.SignUpBtn, !darkMode && styles.lightBorder]}
       onPress={() => navigation.navigate('SignUp')}>
-        <Text style={styles.textBtn}>SignUp</Text>
+        <Text style={[styles.textBtn, !darkMode && styles.borderLightText]}>SignUp</Text>
       </TouchableOpacity>
 
       </Animatable.View>
@@ -72,9 +86,10 @@ const styles = StyleSheet.create({
     flex:2,
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
   imageStyle: {
-    width: '50%',
+    width: '120%',
     height: '50%',
     
   },
@@ -102,7 +117,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     width: '60%',
     alignSelf: 'center',
-    bottom: '35%',
+    bottom: '32%',
     backgroundColor: '#090909',
     justifyContent: 'center',
     alignItems: 'center',
@@ -126,6 +141,33 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+    backgroundColor:'white'
+  },
+  //light mode
+  modeText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+  },
+  darkModeText: {
+    color: 'white', // Altera a cor do texto para branco no modo escuro
+  },
+  lightView: {
+    backgroundColor: 'white'
+  },
+  containerTextLight: {
+    backgroundColor: '#090909'
+  },
+  lightText: {
+    color:'white'
+  },
+  borderLightText: {
+    color:'white'
+  },
+  lightBorder: {
+    backgroundColor: '#af1313'
+
   },
  
 });
