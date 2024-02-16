@@ -11,16 +11,20 @@ import { useNavigation } from '@react-navigation/native';
 
 
 
-const Login = () => {
+const Login = ({route}) => {
+
+  const [darkMode, setDarkMode] = useState(route.params);
+   const handleDarkModeToggle = () => {
+   setDarkMode(!darkMode);
+    route = !route;
+  };
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const auth = fireBase_AUTH;
   const navigation = useNavigation();
   
-
-  
-
   const handleLogin = async () => {
 
     if(email && password) {
@@ -37,48 +41,49 @@ const Login = () => {
       }
       setEmail('')
       setPassword('')
-    }
-    }
-  
+    }}
+    
+    return (
+    <View style={[styles.container, !darkMode && styles.blackbackground]}>
 
-  
-  return (
-    <View style={styles.container}>
-
-      <Animatable.View style={styles.animatableView} animation={"fadeInLeft"} delay={500}>
-        <Text style={styles.message}>Log-In</Text>
+      <Animatable.View style={styles.animatableView} animation={"fadeInLeft"} delay={900}>
+        <Text style={[styles.message, !darkMode && styles.lightText]}>Log-In</Text>
        </Animatable.View>
 
-       <Animatable.View style={styles.animatableTitle} animation={"fadeInUp"}>
-        <Text style={styles.title}>Email</Text>
+       <Animatable.View animation={!darkMode ? "fadeInDown" : "fadeInUp"} style={[styles.animatableTitle, !darkMode && styles.viewMode]}>
+        <Text style={[styles.title,, !darkMode && styles.blacktext]}>Email</Text>
         <TextInput placeholder='Type your email...' style={styles.input} placeholderTextColor={'#a7a3b4'}  onChangeText={text => setEmail(text)} // Atualiza o estado do email
         value={email}/>
 
-        <Text style={styles.title}>Password</Text>
+        <Text style={[styles.title,, !darkMode && styles.blacktext]}>Password</Text>
         <TextInput placeholder='Type your password...' style={styles.input} placeholderTextColor={'#a7a3b4'} onChangeText={text => setPassword(text)} value={password}
         secureTextEntry={true}/>
 
         <TouchableOpacity style={styles.forgot}>
-          <Text style={styles.registerBtn}>Forgot your password?</Text>
+          <Text style={[styles.registerBtn, !darkMode && styles.blacktext]}>Forgot your password?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.login} onPress={handleLogin}  >
-          <Text style={styles.lgnBtn}>Login</Text>
+        <TouchableOpacity style={[styles.login,  !darkMode && styles.blackbackground]} onPress={handleLogin}  >
+          <Text style={[styles.lgnBtn, !darkMode && styles.lightText]}>Login</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.register}>
           <Text style={styles.registerBtn}>Don't have an account yet? Sign Up</Text>
         </TouchableOpacity>
 
-        <Animatable.Image 
-        animation="flipInY"
-        delay={600}
-        source={require('../../assets/itachi.jpg')}
-        style={styles.imageStyle}
-        resizeMode='contain'
+        <Animatable.Image animation={!darkMode ? "flipInY" : "flipInX"}
+        duration={3000}
+        source={!darkMode ? require('../../assets/light.png') : require('../../assets/uchihaW.jpg')}
+         style={styles.imageStyle}
+        resizeMode= 'contain'
       />
+
+      <TouchableOpacity onPress={handleDarkModeToggle}>
+      <Text style={[styles.modeText, darkMode && styles.darkModeText]}>{darkMode ? 'Dark Mode' : 'Light Mode'} </Text>
+      </TouchableOpacity>
       </Animatable.View>
-      </View>
+
+    </View>
     
   )
 }
@@ -146,12 +151,60 @@ containerLogo: {
   alignItems: 'center',
 },
 imageStyle: {
-  width: '50%',
-  height: '50%',
-  left: 100
-
+  width: '60%',
+  height: '30%',
+  alignSelf:'center'
+},
+darkModeText: {
+  color: '#a7a3b4', 
   
 },
-})
+opacityMode: {
+  alignSelf: 'center',
+  justifyContent: 'center',
+  alignItems: 'center',
+  
+  
+},
+modeText: {
+  color: '#a7a3b4',
+  alignSelf:'center',
+  height: '20%',
+  
+  fontSize: 16,
+  fontWeight: 'bold',
+  fontStyle: 'italic',
+},
+darkModeText: {
+  color: '#a7a3b4', // Altera a cor do texto para branco no modo escuro
+},
+lightView: {
+  backgroundColor: 'white'
+},
+containerTextLight: {
+  backgroundColor: '#090909'
+},
+lightText: {
+  color:'white'
+},
+borderLightText: {
+  color:'white'
+},
+lightBorder: {
+  backgroundColor: '#af1313'
+
+},
+viewMode: {
+  backgroundColor: 'white'
+},
+blackbackground: {
+  backgroundColor: 'black'
+},
+blacktext: {
+  color: 'black'
+}
+
+});
+
 
 export default Login

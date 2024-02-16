@@ -28,6 +28,9 @@ const Welcome = () => {
     }, 2000);
   }, []);
 //-------------------------------------------------------------------------------
+const goToLogin = () => {
+  navigation.navigate('SignUp', darkMode); // Passa o estado darkMode como parâmetro
+};
 return (
   <ScrollView
   contentContainerStyle={styles.scrollView}
@@ -61,12 +64,12 @@ return (
       <Text style={[styles.text, !darkMode && styles.lightText]}>Login to get started or sign up to start your adventure</Text>
 
       <TouchableOpacity style={[styles.loginBtn,!darkMode && styles.lightBorder]}
-      onPress={() => navigation.navigate('SignUp')}>
+      onPress={goToLogin}>
         <Text style={[styles.textBtn, !darkMode && styles.borderLightText]}>Log In</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={[styles.SignUpBtn, !darkMode && styles.lightBorder]}
-      onPress={() => navigation.navigate('SignUp')}>
+      onPress={() => navigation.navigate('Register')}>
         <Text style={[styles.textBtn, !darkMode && styles.borderLightText]}>SignUp</Text>
       </TouchableOpacity>
 
