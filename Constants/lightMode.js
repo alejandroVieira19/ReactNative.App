@@ -83,6 +83,23 @@ export const registerLightMode = {
     },
     lightText: {
         color: COLORS.black
+    },
+    lightOpacity: {
+        backgroundColor:COLORS.uchihaRed,
+        
+    },
+    lightSignUp: {
+        color: COLORS.white
+    },
+    error: {
+        width: "100%",
+        height: 48,
+        borderColor: COLORS.uchihaRed,
+        borderWidth:1,
+        borderRadius:8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingLeft:22
     }
 }
 

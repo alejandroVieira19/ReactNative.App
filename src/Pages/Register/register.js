@@ -34,6 +34,9 @@ const Register = ({route}) => {
   const [countryCode,setCountrycode] = useState('351');
   const [phoneNumber, setPhoneNumber] = useState('');
 
+  const [isPassLess, setBorderColor] = useState(false); // Estado para controlar a cor da borda
+
+
   // Concatena o código do país e o número de telefone
   const formatPhoneNumber = () => {
     const formattedNumber = `+${countryCode}${phoneNumber}`;
@@ -42,8 +45,9 @@ const Register = ({route}) => {
   
     const userProfile = async () => {
     const formattedNumber = formatPhoneNumber();
+    checkPasswordLength(password)
     try {
-      // Criar usuário com e-mail e senha
+      
       const userCredential = await createUserWithEmailAndPassword(auth,email, password);
       
       // Obter o ID do usuário
@@ -65,6 +69,8 @@ const Register = ({route}) => {
   }
 }
 
+
+
   const checkBox = () => {
     setCountrycode('351');
     setPassword('');
@@ -72,6 +78,12 @@ const Register = ({route}) => {
     setUsername('');
     setEmail('')
   }
+
+  const checkPasswordLength = () => {
+    if (password.length < 8) {
+       setBorderColor(!isPassLess);
+  }
+};
 
   
 
@@ -129,24 +141,29 @@ const Register = ({route}) => {
           <View style={styles.emailView}>
           <Text style={[styles.emailText, !darkMode && registerLightMode.lightText]}>Password</Text>
 
-          <Animatable.View style={styles.borderView} animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
+          <Animatable.View style={[styles.borderView, !isPassLess ? styles.TextInput : registerLightMode.error]} animation={!darkMode ?"flipInY": "flipInX"}
+            duration={3500}>
             <TextInput 
             placeholder='Enter your password' placeholderTextColor={getPlaceholderTextColor()}
-            secureTextEntry = {!isPasswordVisible ? true : false} style={[styles.TextInput, !darkMode && registerLightMode.lightText ]}
+            secureTextEntry = {!isPasswordVisible ? true : false} 
+            style={[styles.TextInput, !darkMode && registerLightMode.lightText]}
             onChangeText={text => setPassword(text)} value={password}/>
 
             <TouchableOpacity style={styles.iconOpacity} onPress={()=> setVisible(!isPasswordVisible)}>
               <Ionicons  name={getIcon()} size={24} color={getPlaceholderTextColor()}/>
             </TouchableOpacity>
-          </Animatable.View>
+            </Animatable.View>
           </View>
+          
+          {isPassLess && (<Animatable.Text style={{color:'white', fontSize:12, fontWeight:'bold', left: 8}} 
+          duration={4000} animation={"fadeInLeft"}>Password must be at least 8 characters long</Animatable.Text>)}
 
 
           <View style={styles.signUp}>
           <TouchableOpacity style={styles.signUpOpacity} onPress={userProfile}>
 
-          <Animatable.View style={styles.signborderView} animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
-            <Text style={styles.signText}>Sign Up</Text>
+          <Animatable.View style={[styles.signborderView, !darkMode && registerLightMode.lightOpacity]} animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
+            <Text style={[styles.signText, !darkMode && registerLightMode.lightSignUp]}>Sign Up</Text>
           </Animatable.View>
           </TouchableOpacity>
           </View>
