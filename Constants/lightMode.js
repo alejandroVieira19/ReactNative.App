@@ -100,6 +100,13 @@ export const registerLightMode = {
         alignItems: 'center',
         justifyContent: 'center',
         paddingLeft:22
+    },
+    errorBorder: {
+      color: COLORS.white,
+      width: '12%',
+      borderRightWidth: 1,
+      height: '100%',
+      borderRightColor: COLORS.uchihaRed
     }
 }
 

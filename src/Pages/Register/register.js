@@ -1,95 +1,35 @@
-import { View, Text, ScrollView, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Button} from 'react-native'
-import {React,useState} from 'react'
+import { View, Text, TouchableOpacity, SafeAreaView, TextInput} from 'react-native'
+import {React} from 'react'
 import * as Animatable from 'react-native-animatable'
 
 import { styles } from './Styles'
-import LightMode, { registerLightMode } from '../../../Constants/lightMode'
-import COLORS from '../../../Constants/Colors'
+import  { registerLightMode } from '../../../Constants/lightMode'
 import { Ionicons } from '@expo/vector-icons'
-import { fireBase_AUTH, fireBase_FIRESTORE } from '../../../BackEnd/Database/FireBase/firebase'
-import { createUserWithEmailAndPassword  } from '@firebase/auth';
-import { doc, setDoc,collection } from 'firebase/firestore';
+import WarningPassword, { WarningEmail, WarningEmailEmpty, WarningPhoneNumber } from './Warning'
+import { useUserProfileState } from './UserProfileFunctions'
+
 
 
 
 
 const Register = ({route}) => {
-
-  const auth = fireBase_AUTH;
-  const database = fireBase_FIRESTORE ;
   const darkMode = route.params;
-
-  const getPlaceholderTextColor = () => {
-    return darkMode ? COLORS.uchihaPurple : COLORS.black;
-  };
-
-  const getIcon = () => {
-    return !isPasswordVisible ? 'eye-off' : 'eye'
-  }
-
-  const [isPasswordVisible, setVisible] = useState(false);
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [countryCode,setCountrycode] = useState('351');
-  const [phoneNumber, setPhoneNumber] = useState('');
-
-  const [isPassLess, setBorderColor] = useState(false); // Estado para controlar a cor da borda
-
-
-  // Concatena o código do país e o número de telefone
-  const formatPhoneNumber = () => {
-    const formattedNumber = `+${countryCode}${phoneNumber}`;
-    return formattedNumber;
-  };
-  
-    const userProfile = async () => {
-    const formattedNumber = formatPhoneNumber();
-    checkPasswordLength(password)
-    try {
-      
-      const userCredential = await createUserWithEmailAndPassword(auth,email, password);
-      
-      // Obter o ID do usuário
-      const userId = userCredential.user.uid;
-
-      // Adicionar informações de perfil ao Firestore
-      const userRef = doc(database, 'users', userId);
-      await setDoc(userRef, {
-      email: email,
-      username: username,
-      phoneNumber: formattedNumber,
-      password: password
-    });
-    console.log('Usuário criado com sucesso e perfil adicionado ao Firestore');
-  } catch (error) {
-   console.error('Erro ao criar usuário:', error);
-  } finally {
-    checkBox();
-  }
-}
-
-
-
-  const checkBox = () => {
-    setCountrycode('351');
-    setPassword('');
-    setPhoneNumber('');
-    setUsername('');
-    setEmail('')
-  }
-
-  const checkPasswordLength = () => {
-    if (password.length < 8) {
-       setBorderColor(!isPassLess);
-  }
-};
-
-  
-
-  
-
-  return (
+  const {
+    isPasswordVisible,setVisible,
+    email,setEmail,
+    username,setUsername,
+    password,setPassword,
+    countryCode,setCountrycode,
+    phoneNumber,setPhoneNumber,
+    isPassLess,setBorderColor,
+    isNumberLess,setNumberLess,
+    isEmailValid,setEmailValid,
+    isEmailEmpty,setEmailEmpty,
+    isUserValid, setUserValid,
+    isUserEmpty,setUserEmpty,
+    getPlaceholderTextColor, getIcon, userProfile} = useUserProfileState(darkMode);
+    
+    return (
     <SafeAreaView style={[styles.safeArea, !darkMode && registerLightMode.lightArea]}>
       <Animatable.View style={styles.safeView} animation={!darkMode ?"fadeInLeft": "fadeInRight"} duration={2000}>
 
@@ -101,7 +41,8 @@ const Register = ({route}) => {
         <View style={styles.emailView}>
           <Text style={[styles.emailText, !darkMode && registerLightMode.lightText]}>Username</Text>
 
-          <Animatable.View style={styles.borderView} animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
+          <Animatable.View style={[styles.borderView, !isUserEmpty ? styles.TextInput : registerLightMode.error, !isUserValid ? styles.TextInput : registerLightMode.error]} 
+            animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
             <TextInput 
             placeholder='Enter your username' placeholderTextColor={getPlaceholderTextColor()}
             keyboardType='email-address' style={[styles.TextInput, !darkMode && registerLightMode.lightText ]}
@@ -112,21 +53,24 @@ const Register = ({route}) => {
         <View style={styles.emailView}>
           <Text style={[styles.emailText, !darkMode && registerLightMode.lightText]}>Email address</Text>
 
-          <Animatable.View style={styles.borderView} animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
+          <Animatable.View style={[styles.borderView, !isEmailEmpty ? styles.TextInput : registerLightMode.error, !isEmailValid ? styles.TextInput : registerLightMode.error]} 
+          animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
             <TextInput 
             placeholder='Enter your email address' placeholderTextColor={getPlaceholderTextColor()}
             keyboardType='email-address' style={[styles.TextInput, !darkMode && registerLightMode.lightText ]}
             onChangeText={text => setEmail(text)} value={email}/>
           </Animatable.View>
         </View>
+        <WarningEmail isVisible={isEmailValid}/>
+        <WarningEmailEmpty isVisible={isEmailEmpty}/>
 
         <View style={styles.emailView}>
           <Text style={[styles.emailText, !darkMode && registerLightMode.lightText]}>Mobile Number</Text>
 
-          <Animatable.View style={styles.phoneView} animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
+          <Animatable.View style={[styles.phoneView, !isNumberLess ? styles.TextInput : registerLightMode.error]} animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
             <TextInput 
             placeholder='+351' placeholderTextColor={getPlaceholderTextColor()}
-            keyboardType='numeric' style={[styles.phoneInput, !darkMode && registerLightMode.lightText ]}
+            keyboardType='numeric' style={[styles.phoneInput, !darkMode && registerLightMode.lightText ,!isPassLess ? styles.phoneInput : registerLightMode.errorBorder ]}
              maxLength={3} onChangeText={text => setCountrycode(text)} value={countryCode}/>
 
             <TextInput 
@@ -135,6 +79,8 @@ const Register = ({route}) => {
             maxLength={9} onChangeText={text => setPhoneNumber(text)} value={phoneNumber}/>
             </Animatable.View>
             </View>
+
+           <WarningPhoneNumber isVisible={isNumberLess}/>
             
 
 
@@ -155,9 +101,7 @@ const Register = ({route}) => {
             </Animatable.View>
           </View>
           
-          {isPassLess && (<Animatable.Text style={{color:'white', fontSize:12, fontWeight:'bold', left: 8}} 
-          duration={4000} animation={"fadeInLeft"}>Password must be at least 8 characters long</Animatable.Text>)}
-
+          <WarningPassword isVisible={isPassLess}/>
 
           <View style={styles.signUp}>
           <TouchableOpacity style={styles.signUpOpacity} onPress={userProfile}>
@@ -167,13 +111,8 @@ const Register = ({route}) => {
           </Animatable.View>
           </TouchableOpacity>
           </View>
-
           
-        
-        
-        
-        
-        </Animatable.View>
+          </Animatable.View>
 
     </SafeAreaView>
   )

@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
     },
     TextInput: {
         color: COLORS.white,
-        width: '100%'
+        width: '100%',
     },
     phoneView: {
         width: "100%",
@@ -70,7 +70,8 @@ export const styles = StyleSheet.create({
     },
     enterYourPhone: {
         width: '80%',
-        color: COLORS.white
+        color: COLORS.white,
+        left:8
     },
     iconOpacity: {
         position: 'absolute',
@@ -98,6 +99,12 @@ export const styles = StyleSheet.create({
       fontSize: 20,
       fontWeight: 'bold',
       fontStyle: 'italic'
+    },
+    warningText: {
+        color:'white', 
+        fontSize:12, 
+        fontWeight:'bold', 
+        left: 8
     }
 
 
