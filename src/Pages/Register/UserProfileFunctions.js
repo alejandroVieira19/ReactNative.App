@@ -67,21 +67,32 @@ export const useUserProfileState = (darkMode) => {
     validParameters(password, phoneNumber, email, username)
     
     try {
-       const userCredential = await createUserWithEmailAndPassword(auth,email, password);
+      // Verificar se o username já está em uso
+      const usernameSnapshot = await getDocs(collection(database, 'users'));
+
+      //cria um array de usernames que existem em minha firebase
+      const usernames = usernameSnapshot.docs.map(doc => doc.data().username);
+
+      if (usernames.includes(username)) {
+        console.log('Nome de usuário já está em uso');
+        return; // Saímos da função, pois não podemos criar um usuário com um username já existente
+      }
+    
+      // Se o username não estiver em uso, criamos um novo usuário
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       // Obter o ID do usuário
       const userId = userCredential.user.uid;
-
+    
       // Adicionar informações de perfil ao Firestore
       const userRef = doc(database, 'users', userId);
       await setDoc(userRef, {
         email: email,
         username: username,
         phoneNumber: formattedNumber,
-        password: password
       });
       console.log('Usuário criado com sucesso e perfil adicionado ao Firestore');
     } catch (error) {
-     console.error('Erro ao criar usuário:', error);
+      console.error('Erro ao criar usuário:', error);
     } finally {
       checkBox();
     }
