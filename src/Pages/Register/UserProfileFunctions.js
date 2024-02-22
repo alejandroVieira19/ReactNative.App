@@ -2,7 +2,7 @@ import { useState } from "react";
 import COLORS from '../../../Constants/Colors'
 import { fireBase_AUTH, fireBase_FIRESTORE } from '../../../BackEnd/Database/FireBase/firebase'
 import { createUserWithEmailAndPassword  } from '@firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDocs, collection } from 'firebase/firestore';
 
 export const useUserProfileState = (darkMode) => {
   const auth = fireBase_AUTH;
@@ -22,6 +22,8 @@ export const useUserProfileState = (darkMode) => {
 
   const [isUserValid, setUserValid] = useState(false);
   const [isUserEmpty, setUserEmpty] = useState(false);
+  const [isPhoneNumberValid, setPhoneNumberValid] = useState(false);
+  const [isEmailExists, setEmailExists] = useState(false);
 
   const getPlaceholderTextColor = () => {
     return darkMode ? COLORS.uchihaPurple : COLORS.black;
@@ -47,6 +49,7 @@ export const useUserProfileState = (darkMode) => {
   const validParameters = () => {
     if (password.length < 8) {
         setBorderColor(!isPassLess);
+        
     }
   
     if(phoneNumber.length < 9) {
@@ -72,10 +75,25 @@ export const useUserProfileState = (darkMode) => {
 
       //cria um array de usernames que existem em minha firebase
       const usernames = usernameSnapshot.docs.map(doc => doc.data().username);
+      const phoneNumbers = usernameSnapshot.docs.map(doc => doc.data().phoneNumber)
+      const emails = usernameSnapshot.docs.map(doc => doc.data().email);
+
+      phoneNumbers.forEach(phoneNumber => {
+        console.log(phoneNumber);
+      });
 
       if (usernames.includes(username)) {
-        console.log('Nome de usuário já está em uso');
-        return; // Saímos da função, pois não podemos criar um usuário com um username já existente
+        setUserValid(!isUserValid);
+        return; 
+      }
+
+      if(phoneNumbers.includes(formattedNumber)) {
+        setPhoneNumberValid(!isPhoneNumberValid);
+        return;
+      }
+
+      if(emails.includes(email)) {
+        setEmailExists(!isEmailExists);
       }
     
       // Se o username não estiver em uso, criamos um novo usuário
@@ -92,35 +110,23 @@ export const useUserProfileState = (darkMode) => {
       });
       console.log('Usuário criado com sucesso e perfil adicionado ao Firestore');
     } catch (error) {
-      console.error('Erro ao criar usuário:', error);
+      console.log('Erro ao criar usuário:', error);
     } finally {
       checkBox();
     }
   };
 
   return {
-    isPasswordVisible,
-    setVisible,
-    email,
-    setEmail,
-    username,
-    setUsername,
-    password,
-    setPassword,
-    countryCode,
-    setCountrycode,
-    phoneNumber,
-    setPhoneNumber,
-    isPassLess,
-    setBorderColor,
-    isNumberLess,
-    setNumberLess,
-    isEmailValid,
-    setEmailValid,
-    isEmailEmpty,
-    setEmailEmpty,
-    getPlaceholderTextColor,
-    getIcon,
-    userProfile
+    isPasswordVisible,setVisible,
+    email,setEmail,
+    username,setUsername,
+    password,setPassword,
+    countryCode,setCountrycode,
+    phoneNumber,setPhoneNumber,
+    isPassLess,isNumberLess,
+    isEmailValid,isEmailEmpty,
+    isUserValid,isUserEmpty,
+    isPhoneNumberValid, isEmailExists,
+    getPlaceholderTextColor, getIcon, userProfile
   };
 };

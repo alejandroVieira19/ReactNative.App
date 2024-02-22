@@ -107,7 +107,11 @@ export const registerLightMode = {
       borderRightWidth: 1,
       height: '100%',
       borderRightColor: COLORS.uchihaRed
-    }
+    }, 
+    signUpWithLight: {
+      backgroundColor: COLORS.black
+    },
+    signUpWithText
 }
 
 export default LightMode;

@@ -1,15 +1,12 @@
-import { View, Text, TouchableOpacity, SafeAreaView, TextInput} from 'react-native'
+import { View, Text, TouchableOpacity, SafeAreaView, TextInput,Image} from 'react-native'
 import {React} from 'react'
 import * as Animatable from 'react-native-animatable'
 
 import { styles } from './Styles'
 import  { registerLightMode } from '../../../Constants/lightMode'
 import { Ionicons } from '@expo/vector-icons'
-import WarningPassword, { WarningEmail, WarningEmailEmpty, WarningPhoneNumber } from './Warning'
+import WarningPassword, { WarningUserNameValid, WarningEmailEmpty, WarningPhoneNumber, WarningPhoneNumberValid, WarningEmailValid } from './Warning'
 import { useUserProfileState } from './UserProfileFunctions'
-
-
-
 
 
 const Register = ({route}) => {
@@ -21,14 +18,12 @@ const Register = ({route}) => {
     password,setPassword,
     countryCode,setCountrycode,
     phoneNumber,setPhoneNumber,
-    isPassLess,setBorderColor,
-    isNumberLess,setNumberLess,
-    isEmailValid,setEmailValid,
-    isEmailEmpty,setEmailEmpty,
-    isUserValid, setUserValid,
-    isUserEmpty,setUserEmpty,
+    isPassLess,isNumberLess,
+    isEmailValid,isEmailEmpty,
+    isUserValid,isUserEmpty,
+    isPhoneNumberValid, isEmailExists,
     getPlaceholderTextColor, getIcon, userProfile} = useUserProfileState(darkMode);
-    
+
     return (
     <SafeAreaView style={[styles.safeArea, !darkMode && registerLightMode.lightArea]}>
       <Animatable.View style={styles.safeView} animation={!darkMode ?"fadeInLeft": "fadeInRight"} duration={2000}>
@@ -40,8 +35,8 @@ const Register = ({route}) => {
 
         <View style={styles.emailView}>
           <Text style={[styles.emailText, !darkMode && registerLightMode.lightText]}>Username</Text>
-
-          <Animatable.View style={[styles.borderView, !isUserEmpty ? styles.TextInput : registerLightMode.error, !isUserValid ? styles.TextInput : registerLightMode.error]} 
+          <Animatable.View 
+            style={[styles.borderView, !isUserEmpty ? styles.TextInput : registerLightMode.error, !isUserValid ? styles.TextInput : registerLightMode.error]} 
             animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
             <TextInput 
             placeholder='Enter your username' placeholderTextColor={getPlaceholderTextColor()}
@@ -49,11 +44,13 @@ const Register = ({route}) => {
             onChangeText={text => setUsername(text)} value={username}/>
           </Animatable.View>
         </View>
+        <WarningUserNameValid isVisible={isUserValid} duration={2000}/>
+        
+        
 
         <View style={styles.emailView}>
           <Text style={[styles.emailText, !darkMode && registerLightMode.lightText]}>Email address</Text>
-
-          <Animatable.View style={[styles.borderView, !isEmailEmpty ? styles.TextInput : registerLightMode.error, !isEmailValid ? styles.TextInput : registerLightMode.error]} 
+          <Animatable.View style={[styles.borderView, !isEmailEmpty ? styles.TextInput : registerLightMode.error, !isEmailExists ? styles.TextInput : registerLightMode.error]} 
           animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
             <TextInput 
             placeholder='Enter your email address' placeholderTextColor={getPlaceholderTextColor()}
@@ -61,60 +58,129 @@ const Register = ({route}) => {
             onChangeText={text => setEmail(text)} value={email}/>
           </Animatable.View>
         </View>
-        <WarningEmail isVisible={isEmailValid}/>
-        <WarningEmailEmpty isVisible={isEmailEmpty}/>
+        <WarningEmailEmpty isVisible={isEmailEmpty} duration={2000}/>
+        <WarningEmailValid isVisible={isEmailValid}/>
 
+        
         <View style={styles.emailView}>
           <Text style={[styles.emailText, !darkMode && registerLightMode.lightText]}>Mobile Number</Text>
-
-          <Animatable.View style={[styles.phoneView, !isNumberLess ? styles.TextInput : registerLightMode.error]} animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
+          <Animatable.View style={[styles.phoneView, !isNumberLess ? styles.TextInput : registerLightMode.error, !isPhoneNumberValid ? styles.TextInput : registerLightMode.error]} animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
             <TextInput 
             placeholder='+351' placeholderTextColor={getPlaceholderTextColor()}
-            keyboardType='numeric' style={[styles.phoneInput, !darkMode && registerLightMode.lightText ,!isPassLess ? styles.phoneInput : registerLightMode.errorBorder ]}
+            keyboardType='numeric' style={[styles.phoneInput, !darkMode && registerLightMode.lightText ,!isPassLess ? styles.phoneInput : registerLightMode.errorBorder, !isPhoneNumberValid ? styles.phoneInput : registerLightMode.errorBorder ]}
              maxLength={3} onChangeText={text => setCountrycode(text)} value={countryCode}/>
-
             <TextInput 
             placeholder='Enter your Phone Number' placeholderTextColor={getPlaceholderTextColor()}
             keyboardType='numeric' style={[styles.enterYourPhone, !darkMode && registerLightMode.lightText ]}
             maxLength={9} onChangeText={text => setPhoneNumber(text)} value={phoneNumber}/>
             </Animatable.View>
             </View>
-
-           <WarningPhoneNumber isVisible={isNumberLess}/>
+            <WarningPhoneNumber isVisible={isNumberLess}/>
+           <WarningPhoneNumberValid isVisible={isPhoneNumberValid}/>
             
 
 
           <View style={styles.emailView}>
           <Text style={[styles.emailText, !darkMode && registerLightMode.lightText]}>Password</Text>
-
-          <Animatable.View style={[styles.borderView, !isPassLess ? styles.TextInput : registerLightMode.error]} animation={!darkMode ?"flipInY": "flipInX"}
+           <Animatable.View style={[styles.borderView, !isPassLess ? styles.TextInput : registerLightMode.error]} animation={!darkMode ?"flipInY": "flipInX"}
             duration={3500}>
             <TextInput 
             placeholder='Enter your password' placeholderTextColor={getPlaceholderTextColor()}
             secureTextEntry = {!isPasswordVisible ? true : false} 
             style={[styles.TextInput, !darkMode && registerLightMode.lightText]}
             onChangeText={text => setPassword(text)} value={password}/>
-
             <TouchableOpacity style={styles.iconOpacity} onPress={()=> setVisible(!isPasswordVisible)}>
               <Ionicons  name={getIcon()} size={24} color={getPlaceholderTextColor()}/>
             </TouchableOpacity>
             </Animatable.View>
           </View>
-          
           <WarningPassword isVisible={isPassLess}/>
 
           <View style={styles.signUp}>
           <TouchableOpacity style={styles.signUpOpacity} onPress={userProfile}>
-
-          <Animatable.View style={[styles.signborderView, !darkMode && registerLightMode.lightOpacity]} animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
+            <Animatable.View style={[styles.signborderView, !darkMode && registerLightMode.lightOpacity]} animation={!darkMode ?"flipInY": "flipInX"} duration={3500}>
             <Text style={[styles.signText, !darkMode && registerLightMode.lightSignUp]}>Sign Up</Text>
           </Animatable.View>
           </TouchableOpacity>
           </View>
-          
+
+          <View style={styles.signUpWithView}>
+                    <View style={[styles.signUpWith, !darkMode && registerLightMode.signUpWithLight]}/>
+                    <Text style={[styles.signUpWithText, !darkMode && registerLightMode.lightText] }>Or Sign up with</Text>
+                    <View
+                        style={[styles.signUpWith, !darkMode && registerLightMode.signUpWithLight]}
+                    />
+              </View>
+
+              <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center'
+                }}>
+                    <TouchableOpacity
+                        onPress={() => console.log("Pressed")}
+                        style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexDirection: 'row',
+                            height: 52,
+                            borderWidth: 1,
+                            borderColor: 'grey',
+                            marginRight: 4,
+                            borderRadius: 10
+                        }}
+                    >
+                        <Image
+                            source={require("../../assets/facebook.png")}
+                            style={{
+                                height: 36,
+                                width: 36,
+                                marginRight: 8
+                            }}
+                            resizeMode='contain'
+                        />
+
+                        <Text>Facebook</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity
+                        onPress={() => console.log("Pressed")}
+                        style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexDirection: 'row',
+                            height: 52,
+                            borderWidth: 1,
+                            borderColor: 'grey',
+                            marginRight: 4,
+                            borderRadius: 10
+                        }}
+                    >
+                        <Image
+                            source={require("../../assets/google.png")}
+                            style={{
+                                height: 36,
+                                width: 36,
+                                marginRight: 8
+                            }}
+                            resizeMode='contain'
+                        />
+
+                        <Text>Google</Text>
+                    </TouchableOpacity>
+                </View>
+                    
+
+                
+
+
           </Animatable.View>
 
-    </SafeAreaView>
+          
+
+
+          </SafeAreaView>
   )
 }
 

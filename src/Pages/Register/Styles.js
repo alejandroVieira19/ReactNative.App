@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native"
 
 import  COLORS  from "./../../../Constants/Colors"
+import { Colors } from "react-native/Libraries/NewAppScreen"
 
 
 export const styles = StyleSheet.create({
@@ -105,6 +106,20 @@ export const styles = StyleSheet.create({
         fontSize:12, 
         fontWeight:'bold', 
         left: 8
+    },
+    
+    signUpWithView: {
+        flexDirection: 'row', alignItems: 'center', marginVertical: 20 
+    }, 
+    signUpWith : {
+        flex: 1,
+        height: 1,
+        backgroundColor: 'white',
+        marginHorizontal: 10
+    },
+    signUpWithText: {
+        fontSize: 14, 
+        color: COLORS.white
     }
 
 
