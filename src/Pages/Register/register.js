@@ -3,7 +3,7 @@ import {React} from 'react'
 import * as Animatable from 'react-native-animatable'
 
 import { styles } from './Styles'
-import  { registerLightMode } from '../../../Constants/lightMode'
+import  LightMode, { registerLightMode } from '../../../Constants/lightMode'
 import { Ionicons } from '@expo/vector-icons'
 import WarningPassword, { WarningUserNameValid, WarningEmailEmpty, WarningPhoneNumber, WarningPhoneNumberValid, WarningEmailValid } from './Warning'
 import { useUserProfileState } from './UserProfileFunctions'
@@ -107,67 +107,26 @@ const Register = ({route}) => {
           <View style={styles.signUpWithView}>
                     <View style={[styles.signUpWith, !darkMode && registerLightMode.signUpWithLight]}/>
                     <Text style={[styles.signUpWithText, !darkMode && registerLightMode.lightText] }>Or Sign up with</Text>
-                    <View
-                        style={[styles.signUpWith, !darkMode && registerLightMode.signUpWithLight]}
-                    />
+                    <View style={[styles.signUpWith, !darkMode && registerLightMode.signUpWithLight]}/>
               </View>
 
-              <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center'
-                }}>
-                    <TouchableOpacity
-                        onPress={() => console.log("Pressed")}
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            height: 52,
-                            borderWidth: 1,
-                            borderColor: 'grey',
-                            marginRight: 4,
-                            borderRadius: 10
-                        }}
-                    >
+              <View style={styles.googleFacebookView}>
+                    <TouchableOpacity onPress={() => console.log("Pressed")} style={styles.googleFacebookOpacity}>
                         <Image
                             source={require("../../assets/facebook.png")}
-                            style={{
-                                height: 36,
-                                width: 36,
-                                marginRight: 8
-                            }}
-                            resizeMode='contain'
-                        />
+                            style={styles.googleFacebookImage}
+                            resizeMode='contain'/>
 
-                        <Text>Facebook</Text>
+                        <Text style={[styles.googleFacebookText, !darkMode && registerLightMode.lightText]}>Facebook</Text>
                     </TouchableOpacity>
                     
-                    <TouchableOpacity
-                        onPress={() => console.log("Pressed")}
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            height: 52,
-                            borderWidth: 1,
-                            borderColor: 'grey',
-                            marginRight: 4,
-                            borderRadius: 10
-                        }}
-                    >
+                    <TouchableOpacity onPress={() => console.log("Pressed")} style={styles.googleFacebookOpacity}>
                         <Image
                             source={require("../../assets/google.png")}
-                            style={{
-                                height: 36,
-                                width: 36,
-                                marginRight: 8
-                            }}
-                            resizeMode='contain'
-                        />
+                            style={styles.googleFacebookImage}
+                            resizeMode='contain'/>
 
-                        <Text>Google</Text>
+                        <Text style={[styles.googleFacebookText, !darkMode && registerLightMode.lightText]}>Google</Text>
                     </TouchableOpacity>
                 </View>
                     

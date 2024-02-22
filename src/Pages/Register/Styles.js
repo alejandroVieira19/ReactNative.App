@@ -107,7 +107,7 @@ export const styles = StyleSheet.create({
         fontWeight:'bold', 
         left: 8
     },
-    
+
     signUpWithView: {
         flexDirection: 'row', alignItems: 'center', marginVertical: 20 
     }, 
@@ -120,6 +120,30 @@ export const styles = StyleSheet.create({
     signUpWithText: {
         fontSize: 14, 
         color: COLORS.white
+    },
+    googleFacebookView: {
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    googleFacebookOpacity: {
+        
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'row',
+            height: 52,
+            borderWidth: 1,
+            borderColor: 'grey',
+            marginRight: 4,
+            borderRadius: 10
+    },
+    googleFacebookImage: {
+        height: 36,
+        width: 36,
+        marginRight: 8
+    },
+    googleFacebookText: {
+        color: 'white'
     }
 
 

@@ -111,7 +111,14 @@ export const registerLightMode = {
     signUpWithLight: {
       backgroundColor: COLORS.black
     },
-    signUpWithText
+    phoneInput: {
+      color: 'red',
+        width: '12%',
+        borderRightWidth: 1,
+        height: '100%',
+        borderRightColor: COLORS.uchihaPurple
+    }
+  
 }
 
 export default LightMode;
